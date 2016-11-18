@@ -34,29 +34,33 @@ public class ExploredGraph {
         int count;
         
         public ExploredGraph() {
-                Ve = new LinkedList<Vertex>();
-                Ee = new LinkedList<Edge>();
+             Ve = new LinkedList<Vertex>();
+             Ee = new LinkedList<Edge>();
         }
 
         public void initialize(Vertex v) {
-
+            ExploredGraph eg = new ExploredGraph(); //??????
+            Ve.add(v);
             // Implement this
         }
+        
+        //returns explored vertices
         public int nvertices() {
             return Ve.size();
         } // Implement this.
+        
+        //returns number of edges
         public int nedges() {
             return Ee.size();
         }    // Implement this.
+        
+        //depth first search 
         public void idfs(Vertex vi, Vertex vj) {
             count = 0;
-            Vertex open = vi;
-            Vertex closed = vj;
-            while(!open.equals(null)) {
-                Stack<Integer> s = open[0];
-                
-            }
+            Ve.add(vi); //start exploration at vi
+
         } // Implement this. (Iterative Depth-First Search)
+        
         public void bfs(Vertex vi, Vertex vj) {} // Implement this. (Breadth-First Search)
         public ArrayList<Vertex> retrievePath(Vertex vi) {return null;} // Implement this.
         public ArrayList<Vertex> shortestPath(Vertex vi, Vertex vj) {return null;} // Implement this.
@@ -70,7 +74,7 @@ public class ExploredGraph {
                 // Test the vertex constructor: 
                 Vertex v0 = eg.new Vertex("[[4,3,2,1],[],[]]");
                 System.out.println(v0);
-                Operator op = new Operator(0,1);
+                Operator op = eg.new Operator(0,1);
                 if(op.precondition(v0)) {
                     System.out.println(v0.toString());
                     v0 = op.transition(v0);
@@ -143,7 +147,7 @@ public class ExploredGraph {
                 }
         }
         
-        static class Operator {
+        class Operator {
                 private int i, j;
 
                 public Operator(int i, int j) { // Constructor for operators.
@@ -165,8 +169,7 @@ public class ExploredGraph {
                 }
 
                 public Vertex transition(Vertex v) {
-                    ExploredGraph eg = new ExploredGraph();
-                    Vertex res = eg.new Vertex(v.toString());
+                    Vertex res = new Vertex(v.toString());
                     int disk = res.pegs.get(i).pop();
                     res.pegs.get(j).push(disk);
                     
