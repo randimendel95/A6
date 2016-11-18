@@ -3,9 +3,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.Set;
 import java.util.Stack;
 import java.util.function.Function;
+
+import ExploredGraph.Vertex;
 
 /**
  * 
@@ -26,17 +29,17 @@ import java.util.function.Function;
 
 // Here is the main application class:
 public class ExploredGraph {
-        Set<Vertex> Ve; // collection of explored vertices
-        Set<Edge> Ee;   // collection of explored edges
+        LinkedList<Vertex> Ve; // collection of explored vertices
+        LinkedList<Edge> Ee;   // collection of explored edges
         int count;
         
         public ExploredGraph() {
-                Ve = new LinkedHashSet<Vertex>();
-                Ee = new LinkedHashSet<Edge>();
+                Ve = new LinkedList<Vertex>();
+                Ee = new LinkedList<Edge>();
         }
 
         public void initialize(Vertex v) {
-                Ve = new Set<Vertex> (v);
+
             // Implement this
         }
         public int nvertices() {
@@ -67,6 +70,12 @@ public class ExploredGraph {
                 // Test the vertex constructor: 
                 Vertex v0 = eg.new Vertex("[[4,3,2,1],[],[]]");
                 System.out.println(v0);
+                Operator op = new Operator(0,1);
+                if(op.precondition(v0)) {
+                    System.out.println(v0.toString());
+                    v0 = op.transition(v0);
+                    System.out.println(v0.toString());
+                }
                 // Add your own tests here.
                 // The autograder code will be used to test your basic functionality later.
 
@@ -126,15 +135,15 @@ public class ExploredGraph {
                 }
                 
                 public Vertex getEndpoint1() {
-                    return vi;
+                    return start;
                 }
                 
                 public Vertex getEndpoint2() {
-                    return vj;
+                    return end;
                 }
         }
         
-        class Operator {
+        static class Operator {
                 private int i, j;
 
                 public Operator(int i, int j) { // Constructor for operators.
@@ -144,27 +153,34 @@ public class ExploredGraph {
 
                 public boolean precondition(Vertex v) {
                     // it would possible and legal to move a disk from peg i to peg j
-                    if(it is legal and possible, move from peg i to peg j){
+                    System.out.println(v.pegs.get(i).peek().toString());
+                    if(v.pegs.get(i).isEmpty()){
+                        return false;
+                    } else if (v.pegs.get(j).isEmpty() || v.pegs.get(i).peek() < v.pegs.get(j).peek()){
+                        System.out.println("true");
                         return true;
                     } else {
                         return false;
                     }
-                        // TODO: Add code that will determine whether or not this 
-                        // operator is applicable to this vertex.
                 }
 
                 public Vertex transition(Vertex v) {
+                    ExploredGraph eg = new ExploredGraph();
+                    Vertex res = eg.new Vertex(v.toString());
+                    int disk = res.pegs.get(i).pop();
+                    res.pegs.get(j).push(disk);
+                    
                         // TODO: Add code to return a "successor" of v, according
                         // to this operator.
                     // return a new vertex that represents the state reached by applying the operator
-                        return null; // Placeholder.  change this.
+                    return res; // Placeholder.  change this.
                 }
 
                 @Override
                 public String toString() {
                         // TODO: Add code to return a string good enough
                         // to distinguish different operators
-                        return "attempt to move from peg" + i + "to peg" + j;
+                        return "attempt to move from peg " + i + " to peg " + j;
                 }
         }
 
