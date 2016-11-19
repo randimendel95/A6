@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Queue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -56,12 +57,79 @@ public class ExploredGraph {
         
         //depth first search 
         public void idfs(Vertex vi, Vertex vj) {
+            //
+            Stack<Vertex> s = new Stack<Vertex>(); //stack of places to explore
+            s.push(vi);
+            Vertex next;
             count = 0;
-            Ve.add(vi); //start exploration at vi
+            //Ve.add(vi); 
+            while(!s.isEmpty() && !next.equals(vj)){
+                next = s.pop(); //need to go to all children of each vertex in "next"
+                Ve.add(next); //next has been explored
+                
+                //should these be in the while loop to reset what Vertex they are operating on
+                //or should they go before to avoid repetition
+                Operator op = new Operator(0,1); 
+                Operator op1 = new Operator(1,2);
+                Operator op2 = new Operator(2,0);
+                if(op.precondition(next)){
+                    Vertex nextAdj = op.transition(next);
+                    s.push(nextAdj);
+                    Edge e = new Edge(next,nextAdj);
+                    Ee.add(e);
+                }
+                if(op1.precondition(next)){
+                    Vertex nextAdj = op1.transition(next);
+                    s.push(nextAdj);
+                    Edge e = new Edge(next,nextAdj);
+                    Ee.add(e);
+                }
+                if(op2.precondition(next)){
+                    Vertex nextAdj = op2.transition(next);
+                    s.push(nextAdj);
+                    Edge e = new Edge(next,nextAdj);
+                    Ee.add(e);
+                }             
+            }
 
         } // Implement this. (Iterative Depth-First Search)
         
-        public void bfs(Vertex vi, Vertex vj) {} // Implement this. (Breadth-First Search)
+        public void bfs(Vertex vi, Vertex vj) {
+            Queue<Vertex> q = new LinkedList<Vertex>();
+            q.add(vi);
+            Vertex next;
+            count = 0;
+            while(!q.isEmpty() && !next.equals(vj)){
+                next = q.poll(); //get element in q
+                Ve.add(next); //next has been explored
+                
+                //should these be in the while loop to reset what Vertex they are operating on
+                //or should they go before to avoid repetition
+                Operator op = new Operator(0,1); 
+                Operator op1 = new Operator(1,2);
+                Operator op2 = new Operator(2,0);
+                if(op.precondition(next)){
+                    Vertex nextAdj = op.transition(next);
+                    q.push(nextAdj);
+                    Edge e = new Edge(next,nextAdj);
+                    Ee.add(e);
+                }
+                if(op1.precondition(next)){
+                    Vertex nextAdj = op1.transition(next);
+                    q.push(nextAdj);
+                    Edge e = new Edge(next,nextAdj);
+                    Ee.add(e);
+                }
+                if(op2.precondition(next)){
+                    Vertex nextAdj = op2.transition(next);
+                    q.push(nextAdj);
+                    Edge e = new Edge(next,nextAdj);
+                    Ee.add(e);
+                }             
+            }
+
+            
+        } // Implement this. (Breadth-First Search)
         public ArrayList<Vertex> retrievePath(Vertex vi) {return null;} // Implement this.
         public ArrayList<Vertex> shortestPath(Vertex vi, Vertex vj) {return null;} // Implement this.
         public Set<Vertex> getVertices() {return Ve;} 
