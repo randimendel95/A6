@@ -110,19 +110,19 @@ public class ExploredGraph {
                 Operator op2 = new Operator(2,0);
                 if(op.precondition(next)){
                     Vertex nextAdj = op.transition(next);
-                    q.push(nextAdj);
+                    q.add(nextAdj);
                     Edge e = new Edge(next,nextAdj);
                     Ee.add(e);
                 }
                 if(op1.precondition(next)){
                     Vertex nextAdj = op1.transition(next);
-                    q.push(nextAdj);
+                    q.add(nextAdj);
                     Edge e = new Edge(next,nextAdj);
                     Ee.add(e);
                 }
                 if(op2.precondition(next)){
                     Vertex nextAdj = op2.transition(next);
-                    q.push(nextAdj);
+                    q.add(nextAdj);
                     Edge e = new Edge(next,nextAdj);
                     Ee.add(e);
                 }             
