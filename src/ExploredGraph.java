@@ -33,6 +33,8 @@ public class ExploredGraph {
         LinkedList<Vertex> Ve; // collection of explored vertices
         LinkedList<Edge> Ee;   // collection of explored edges
         int count;
+        Stack<Vertex> s = new Stack<Vertex>();
+        Queue<Vertex> q = new LinkedList<Vertex>();
         
         public ExploredGraph() {
              Ve = new LinkedList<Vertex>();
@@ -55,43 +57,54 @@ public class ExploredGraph {
             return Ee.size();
         }    // Implement this.
         
+        public void checkMove (int startPeg, int endPeg, Vertex v) {
+            
+            Operator op = new Operator(startPeg, endPeg);
+            if(op.precondition(v)) {
+                Vertex nextAdj = op.transition(v);
+                if(!containsVertex(nextAdj)){ //it has not yet been found
+                    Ve.add(nextAdj);
+                    s.push(nextAdj);
+                    Edge e = new Edge(v,nextAdj);
+                    Ee.add(e);
+                    System.out.println(e.toString());
+                    System.out.print("");
+                }
+            }
+        }
+        
+        public Boolean containsVertex (Vertex v){
+            for(Vertex explored:Ve){
+                if(explored.toString().equals(v.toString())){
+                    return true;
+                }
+            }
+            return false;
+        }
+        
         //depth first search 
         public void idfs(Vertex vi, Vertex vj) {
-            //
-            Stack<Vertex> s = new Stack<Vertex>(); //stack of places to explore
+            //Stack<Vertex> s = new Stack<Vertex>(); //stack of places to explore
             s.push(vi);
-            Vertex next;
             count = 0;
-            //Ve.add(vi); 
+            Ve.add(vi);
+            Vertex next = new Vertex("[[],[],[]]");
             while(!s.isEmpty() && !next.equals(vj)){
+                next = new Vertex("[[],[],[]]");
                 next = s.pop(); //need to go to all children of each vertex in "next"
-                Ve.add(next); //next has been explored
+                //Ve.add(next); //next has been explored
                 
-                //should these be in the while loop to reset what Vertex they are operating on
-                //or should they go before to avoid repetition
-                Operator op = new Operator(0,1); 
-                Operator op1 = new Operator(1,2);
-                Operator op2 = new Operator(2,0);
-                if(op.precondition(next)){
-                    Vertex nextAdj = op.transition(next);
-                    s.push(nextAdj);
-                    Edge e = new Edge(next,nextAdj);
-                    Ee.add(e);
+                for(int i=0; i<3; i++){
+                    for(int j=0; j<3; j++){
+                        if(i != j){
+                            checkMove(i,j,next);
+                        }
+                    }
                 }
-                if(op1.precondition(next)){
-                    Vertex nextAdj = op1.transition(next);
-                    s.push(nextAdj);
-                    Edge e = new Edge(next,nextAdj);
-                    Ee.add(e);
-                }
-                if(op2.precondition(next)){
-                    Vertex nextAdj = op2.transition(next);
-                    s.push(nextAdj);
-                    Edge e = new Edge(next,nextAdj);
-                    Ee.add(e);
-                }             
-            }
-
+                //next = s.pop();
+                
+            } 
+            System.out.println(next);
         } // Implement this. (Iterative Depth-First Search)
         
         public void bfs(Vertex vi, Vertex vj) {
@@ -110,21 +123,27 @@ public class ExploredGraph {
                 Operator op2 = new Operator(2,0);
                 if(op.precondition(next)){
                     Vertex nextAdj = op.transition(next);
-                    q.add(nextAdj);
-                    Edge e = new Edge(next,nextAdj);
-                    Ee.add(e);
+                    if(!Ve.contains(nextAdj)){ //it has not yet been found
+                        q.add(nextAdj);
+                        Edge e = new Edge(next,nextAdj);
+                        Ee.add(e);
+                    }
                 }
                 if(op1.precondition(next)){
                     Vertex nextAdj = op1.transition(next);
-                    q.add(nextAdj);
-                    Edge e = new Edge(next,nextAdj);
-                    Ee.add(e);
+                    if(!Ve.contains(nextAdj)){ //it has not yet been found
+                        q.add(nextAdj);
+                        Edge e = new Edge(next,nextAdj);
+                        Ee.add(e);
+                    }
                 }
                 if(op2.precondition(next)){
                     Vertex nextAdj = op2.transition(next);
-                    q.add(nextAdj);
-                    Edge e = new Edge(next,nextAdj);
-                    Ee.add(e);
+                    if(!Ve.contains(nextAdj)){ //it has not yet been found
+                        q.add(nextAdj);
+                        Edge e = new Edge(next,nextAdj);
+                        Ee.add(e);
+                    }
                 }             
             }
 
@@ -142,12 +161,9 @@ public class ExploredGraph {
                 // Test the vertex constructor: 
                 Vertex v0 = eg.new Vertex("[[4,3,2,1],[],[]]");
                 System.out.println(v0);
-                Operator op = eg.new Operator(0,1);
-                if(op.precondition(v0)) {
-                    System.out.println(v0.toString());
-                    v0 = op.transition(v0);
-                    System.out.println(v0.toString());
-                }
+                Vertex v1 = eg.new Vertex("[],[],[4,3,2,1]");
+                //Operator op = eg.new Operator(0,1);
+                eg.idfs(v0,v1);
                 // Add your own tests here.
                 // The autograder code will be used to test your basic functionality later.
 
@@ -225,7 +241,7 @@ public class ExploredGraph {
 
                 public boolean precondition(Vertex v) {
                     // it would possible and legal to move a disk from peg i to peg j
-                    System.out.println(v.pegs.get(i).peek().toString());
+                    //System.out.println(v.pegs.get(i));
                     if(v.pegs.get(i).isEmpty()){
                         return false;
                     } else if (v.pegs.get(j).isEmpty() || v.pegs.get(i).peek() < v.pegs.get(j).peek()){
