@@ -60,9 +60,12 @@ public class ExploredGraph {
         public void checkMove (int startPeg, int endPeg, Vertex v, String searchType) {
             Operator op = new Operator(startPeg, endPeg);
             if(op.precondition(v)) {
+                //System.out.println(v.toString());
+                //System.out.println(Ve.toString());
                 Vertex nextAdj = op.transition(v);
                 if(!containsVertex(nextAdj)){ //it has not yet been found
-                    Ve.add(nextAdj);
+                    //System.out.println("discovered" + nextAdj.toString());
+                    //Ve.add(nextAdj);
                     if(searchType.equals("breadth first")){
                         q.add(nextAdj);
                     } else {
@@ -70,8 +73,8 @@ public class ExploredGraph {
                     }
                     Edge e = new Edge(v,nextAdj);
                     Ee.add(e);
-                    System.out.println(e.toString());
-                    System.out.print("");
+                    //System.out.println(e.toString());
+                    System.out.println("");
                 }
             }
         }
@@ -96,6 +99,9 @@ public class ExploredGraph {
             while(!s.isEmpty() && !next.toString().equals(vj.toString())){
                 next = new Vertex("[[],[],[]]");
                 next = s.pop(); //need to go to all children of each vertex in "next"
+                Ve.add(next);
+                System.out.println("node: " + next);
+                System.out.println("s: " + s.toString());
                 for(int i=0; i<3; i++){
                     for(int j=0; j<3; j++){
                         if(i != j){
@@ -176,12 +182,12 @@ public class ExploredGraph {
                                         parts[i]=parts[i].replaceAll("\\[","");
                                         parts[i]=parts[i].replaceAll("\\]","");
                                         List<String> al = new ArrayList<String>(Arrays.asList(parts[i].split(",")));
-                                        System.out.println("ArrayList al is: "+al);
+                                        //System.out.println("ArrayList al is: "+al);
                                         Iterator<String> it = al.iterator();
                                         while (it.hasNext()) {
                                                 String item = it.next();
                         if (!item.equals("")) {
-                                System.out.println("item is: "+item);
+                                //System.out.println("item is: "+item);
                                 pegs.get(i).push(Integer.parseInt(item));
                         }
                                         }
@@ -238,7 +244,7 @@ public class ExploredGraph {
                     if(v.pegs.get(i).isEmpty()){
                         return false;
                     } else if (v.pegs.get(j).isEmpty() || v.pegs.get(i).peek() < v.pegs.get(j).peek()){
-                        System.out.println("true");
+                        //System.out.println("true");
                         return true;
                     } else {
                         return false;
