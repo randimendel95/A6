@@ -9,8 +9,6 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.function.Function;
 
-import ExploredGraph.Vertex;
-
 /**
  * 
  */
@@ -148,8 +146,8 @@ public class ExploredGraph {
         
         // Implement this.
         public ArrayList<Vertex> shortestPath(Vertex vi, Vertex vj) {return null;} // Implement this.
-        public Set<Vertex> getVertices() {return Ve;} 
-        public Set<Edge> getEdges() {return Ee;} 
+        public LinkedList<Vertex> getVertices() {return Ve;} 
+        public LinkedList<Edge> getEdges() {return Ee;} 
         /**
          * @param args
          */
