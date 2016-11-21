@@ -57,14 +57,17 @@ public class ExploredGraph {
             return Ee.size();
         }    // Implement this.
         
-        public void checkMove (int startPeg, int endPeg, Vertex v) {
-            
+        public void checkMove (int startPeg, int endPeg, Vertex v, String searchType) {
             Operator op = new Operator(startPeg, endPeg);
             if(op.precondition(v)) {
                 Vertex nextAdj = op.transition(v);
                 if(!containsVertex(nextAdj)){ //it has not yet been found
                     Ve.add(nextAdj);
-                    s.push(nextAdj);
+                    if(searchType.equals("breadth first")){
+                        q.add(nextAdj);
+                    } else {
+                        s.push(nextAdj);
+                    }
                     Edge e = new Edge(v,nextAdj);
                     Ee.add(e);
                     System.out.println(e.toString());
@@ -72,6 +75,7 @@ public class ExploredGraph {
                 }
             }
         }
+        
         
         public Boolean containsVertex (Vertex v){
             for(Vertex explored:Ve){
@@ -92,12 +96,10 @@ public class ExploredGraph {
             while(!s.isEmpty() && !next.toString().equals(vj.toString())){
                 next = new Vertex("[[],[],[]]");
                 next = s.pop(); //need to go to all children of each vertex in "next"
-                //Ve.add(next); //next has been explored
-                
                 for(int i=0; i<3; i++){
                     for(int j=0; j<3; j++){
                         if(i != j){
-                            checkMove(i,j,next);
+                            checkMove(i,j,next,"depth first");
                         }
                     }
                 }
@@ -107,43 +109,21 @@ public class ExploredGraph {
         } // Implement this. (Iterative Depth-First Search)
         
         public void bfs(Vertex vi, Vertex vj) {
-            Queue<Vertex> q = new LinkedList<Vertex>();
+            //Queue<Vertex> q = new LinkedList<Vertex>();
             q.add(vi);
-            Vertex next;
+            Vertex next = new Vertex("[[],[],[]]");
             count = 0;
             while(!q.isEmpty() && !next.equals(vj)){
                 next = q.poll(); //get element in q
                 Ve.add(next); //next has been explored
+                for(int i=0; i<3; i++){
+                    for(int j=0; j<3; j++){
+                        if(i != j){
+                            checkMove(i,j,next,"breadth first");
+                        }
+                    }
+                }
                 
-                //should these be in the while loop to reset what Vertex they are operating on
-                //or should they go before to avoid repetition
-                Operator op = new Operator(0,1); 
-                Operator op1 = new Operator(1,2);
-                Operator op2 = new Operator(2,0);
-                if(op.precondition(next)){
-                    Vertex nextAdj = op.transition(next);
-                    if(!Ve.contains(nextAdj)){ //it has not yet been found
-                        q.add(nextAdj);
-                        Edge e = new Edge(next,nextAdj);
-                        Ee.add(e);
-                    }
-                }
-                if(op1.precondition(next)){
-                    Vertex nextAdj = op1.transition(next);
-                    if(!Ve.contains(nextAdj)){ //it has not yet been found
-                        q.add(nextAdj);
-                        Edge e = new Edge(next,nextAdj);
-                        Ee.add(e);
-                    }
-                }
-                if(op2.precondition(next)){
-                    Vertex nextAdj = op2.transition(next);
-                    if(!Ve.contains(nextAdj)){ //it has not yet been found
-                        q.add(nextAdj);
-                        Edge e = new Edge(next,nextAdj);
-                        Ee.add(e);
-                    }
-                }             
             }
 
             
