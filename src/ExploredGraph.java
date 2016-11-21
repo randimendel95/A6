@@ -89,7 +89,7 @@ public class ExploredGraph {
             count = 0;
             Ve.add(vi);
             Vertex next = new Vertex("[[],[],[]]");
-            while(!s.isEmpty() && !next.equals(vj)){
+            while(!s.isEmpty() && !next.toString().equals(vj.toString())){
                 next = new Vertex("[[],[],[]]");
                 next = s.pop(); //need to go to all children of each vertex in "next"
                 //Ve.add(next); //next has been explored
@@ -101,7 +101,6 @@ public class ExploredGraph {
                         }
                     }
                 }
-                //next = s.pop();
                 
             } 
             System.out.println(next);
@@ -149,7 +148,19 @@ public class ExploredGraph {
 
             
         } // Implement this. (Breadth-First Search)
-        public ArrayList<Vertex> retrievePath(Vertex vi) {return null;} // Implement this.
+        public LinkedList<Edge> retrievePath(Vertex vi) {
+            LinkedList<Edge> temp = new LinkedList<Edge>();
+            //while()
+            int i = 0;
+                while(i < Ee.size() && !Ee.get(i).toString().equals(vi.toString())){
+                    temp.add(Ee.get(i));
+                    i++;
+                }
+                
+            return temp;
+        }
+        
+        // Implement this.
         public ArrayList<Vertex> shortestPath(Vertex vi, Vertex vj) {return null;} // Implement this.
         public Set<Vertex> getVertices() {return Ve;} 
         public Set<Edge> getEdges() {return Ee;} 
@@ -162,8 +173,10 @@ public class ExploredGraph {
                 Vertex v0 = eg.new Vertex("[[4,3,2,1],[],[]]");
                 System.out.println(v0);
                 Vertex v1 = eg.new Vertex("[],[],[4,3,2,1]");
+                Vertex v2 = eg.new Vertex("[4,3],[1],[2]");
                 //Operator op = eg.new Operator(0,1);
                 eg.idfs(v0,v1);
+                eg.retrievePath(v2);
                 // Add your own tests here.
                 // The autograder code will be used to test your basic functionality later.
 
