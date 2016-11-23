@@ -128,6 +128,8 @@ public class ExploredGraph {
         //depth first search 
         public void idfs(Vertex vi, Vertex vj) {
         	int count = 0;
+                int npegs = vi.pegs.size();
+        	System.out.println("number of pegs: " + npegs);
         	s.push(vi); //Open = V0
         	Ve.clear();
         	//Ve.push(vi); closed = []
@@ -140,9 +142,9 @@ public class ExploredGraph {
         	    LinkedList<Vertex> successors = new LinkedList<Vertex>();
         	    v.label = count;
         		
-        		
-        	    for(int i=0; i<3; i++){
-                        for(int j=0; j<3; j++){
+        	   
+        	    for(int i=0; i<npegs; i++){
+                        for(int j=0; j<npegs; j++){
                             if(i != j){
                                 checkMove(i,j,v,"depth first", successors);// s= successors of v?
                             }
@@ -214,6 +216,7 @@ public class ExploredGraph {
         }*/
         public void bfs(Vertex vi, Vertex vj) {
             int count = 0;
+            int npegs = vi.pegs.size();
             //open = v0
             q.add(vi);
             Ve.clear();
@@ -224,8 +227,8 @@ public class ExploredGraph {
         	v = q.remove();
         	LinkedList<Vertex> successors = new LinkedList<Vertex>();
         	v.label = count;
-        	for(int i=0; i<3; i++){
-                    for(int j=0; j<3; j++){
+        	for(int i=0; i<npegs; i++){
+                    for(int j=0; j<npegs; j++){
                         if(i != j){
                             checkMove(i,j,v,"breadth first", successors);// s= successors of v?
                         }
