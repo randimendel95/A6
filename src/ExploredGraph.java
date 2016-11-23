@@ -303,9 +303,9 @@ public class ExploredGraph {
         	
                 ExploredGraph eg = new ExploredGraph();
                 // Test the vertex constructor: 
-                Vertex v0 = eg.new Vertex("[[4,3,2,1],[],[]]");
+                Vertex v0 = eg.new Vertex("[[4,3,2,1],[],[],[]]");
                 //System.out.println(v0);
-                Vertex v1 = eg.new Vertex("[],[],[4,3,2,1]");
+                Vertex v1 = eg.new Vertex("[],[],[],[4,3,2,1]");
                 System.out.println("iterative depth first search");
                 eg.idfs(v0,v1);
                 System.out.println("path");
