@@ -286,7 +286,8 @@ public class ExploredGraph {
         	ArrayList<Vertex> path = new ArrayList<Vertex>();
         	ExploredGraph eg = new ExploredGraph();
         	eg.bfs(vi, vj);
-        	eg.retrievePath(vj); 
+        	LinkedList<Vertex > tempPath = eg.retrievePath(vj); 
+        	path.addAll(tempPath);
         	return path;
         	
         }
