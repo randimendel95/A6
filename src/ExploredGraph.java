@@ -77,23 +77,19 @@ public class ExploredGraph {
             }
         }*/
         
+        //checks if we can make a move from start peg to end peg
+        //if it can move, will make the move
         public void checkMove (int startPeg, int endPeg, Vertex v, String searchType, LinkedList<Vertex> successors) {
             Operator op = new Operator(startPeg, endPeg);
             if(op.precondition(v)) {
                 //System.out.println(v.toString());
                 //System.out.println(Ve.toString());
                 Vertex nextAdj = op.transition(v);
-                //if(!containsVertex(nextAdj)){ //it has not yet been found
-                    //System.out.println("discovered" + nextAdj.toString());
-                    //Ve.add(nextAdj);
                     if(searchType.equals("breadth first")){
                     	successors.add(nextAdj);
                     } else {
                     	successors.add(nextAdj);
                     }
-                    //System.out.println(e.toString());
-                    //System.out.println("");
-                //}
             }
         }
         
@@ -125,24 +121,24 @@ public class ExploredGraph {
             return false;
         }
         
-        //depth first search 
+        //iterative depth first search from vi to vj
+        //follow each path all the way to the end, then go back
         public void idfs(Vertex vi, Vertex vj) {
         	int count = 0;
                 int npegs = vi.pegs.size();
-        	System.out.println("number of pegs: " + npegs);
         	s.push(vi); //Open = V0
-        	Ve.clear();
-        	//Ve.push(vi); closed = []
-        	vi.predecessor = null;
-        	Vertex v = vi;
-        	while(!s.isEmpty() && !v.toString().equals(vj.toString())){
-        		
+        	Ve.clear(); //start over Ve
+        	vi.predecessor = null; //root node
+        	Vertex v = vi; //start at vi
+        	while(!s.isEmpty() && !v.toString().equals(vj.toString())){ 
+        	    //there's something we haven't yet explored, and we haven't reached vj
+        	    //explore node
         	    System.out.println("");
         	    v = s.pop();
         	    LinkedList<Vertex> successors = new LinkedList<Vertex>();
         	    v.label = count;
         		
-        	   
+        	   //for each peg, check if you can move the disk to the next peg
         	    for(int i=0; i<npegs; i++){
                         for(int j=0; j<npegs; j++){
                             if(i != j){
@@ -150,6 +146,7 @@ public class ExploredGraph {
                             }
                         }
                     }
+        	  
         	    for(Vertex successor : successors){
         		if (containsVertex(successor) || stackContainsVertex(successor)){
         		    //continue
@@ -170,56 +167,14 @@ public class ExploredGraph {
         	}
         	System.out.println("Length of CLOSED = " + Ve.size());
         }
-        /*public void idfs(Vertex vi, Vertex vj) {
-            //Stack<Vertex> s = new Stack<Vertex>(); //stack of places to explore
-            s.push(vi);
-            count = 0;
-            Ve.add(vi);
-            Vertex next = new Vertex("[[],[],[]]");
-            while(!s.isEmpty() && !next.toString().equals(vj.toString())){
-                next = new Vertex("[[],[],[]]");
-                next = s.pop(); //need to go to all children of each vertex in "next"
-                Ve.add(next);
-                System.out.println("node: " + next);
-                System.out.println("s: " + s.toString());
-                for(int i=0; i<3; i++){
-                    for(int j=0; j<3; j++){
-                        if(i != j){
-                            checkMove(i,j,next,"depth first");
-                        }
-                    }
-                }
-                
-            } 
-            System.out.println(next);
-        }*/ // Implement this. (Iterative Depth-First Search)
-        
-        /*public void bfs(Vertex vi, Vertex vj) {
-            //Queue<Vertex> q = new LinkedList<Vertex>();
-            q.add(vi);
-            Vertex next = new Vertex("[[],[],[]]");
-            count = 0;
-            while(!q.isEmpty() && !next.equals(vj)){
-                next = q.poll(); //get element in q
-                Ve.add(next); //next has been explored
-                for(int i=0; i<3; i++){
-                    for(int j=0; j<3; j++){
-                        if(i != j){
-                            checkMove(i,j,next,"breadth first");
-                        }
-                    }
-                }
-                
-            }
 
-            
-        }*/
+        //breadth first search from vertex vi to vertex vj
+        //explore all the neighbors of each node with each next step
         public void bfs(Vertex vi, Vertex vj) {
             int count = 0;
             int npegs = vi.pegs.size();
-            //open = v0
             q.add(vi);
-            Ve.clear();
+            Ve.clear(); //start new search
             vi.predecessor = null;
             Vertex v = vi;
             while (!q.isEmpty() && !v.toString().equals(vj.toString())){
@@ -303,9 +258,9 @@ public class ExploredGraph {
         	
                 ExploredGraph eg = new ExploredGraph();
                 // Test the vertex constructor: 
-                Vertex v0 = eg.new Vertex("[[4,3,2,1],[],[],[]]");
+                Vertex v0 = eg.new Vertex("[[4,3,2,1],[],[]]");
                 //System.out.println(v0);
-                Vertex v1 = eg.new Vertex("[],[],[],[4,3,2,1]");
+                Vertex v1 = eg.new Vertex("[],[],[4,3,2,1]");
                 System.out.println("iterative depth first search");
                 eg.idfs(v0,v1);
                 System.out.println("path");
