@@ -77,7 +77,7 @@ public class ExploredGraph {
             }
         }*/
         
-        public void checkMove (int startPeg, int endPeg, Vertex v, String searchType, Stack<Vertex> successors) {
+        public void checkMove (int startPeg, int endPeg, Vertex v, String searchType, LinkedList<Vertex> successors) {
             Operator op = new Operator(startPeg, endPeg);
             if(op.precondition(v)) {
                 //System.out.println(v.toString());
@@ -89,7 +89,7 @@ public class ExploredGraph {
                     if(searchType.equals("breadth first")){
                         q.add(nextAdj);
                     } else {
-                    	successors.push(nextAdj);
+                    	successors.add(nextAdj);
                     }
                     Edge e = new Edge(v,nextAdj);
                     Ee.add(e);
@@ -125,13 +125,13 @@ public class ExploredGraph {
         	Ve.clear();
         	//Ve.push(vi); closed = []
         	vi.predecessor = null;
-        	Vertex v = null;
-        	while(!s.isEmpty() || v.toString().equals(vj.toString())){
+        	Vertex v = vi;
+        	while(!s.isEmpty() && !v.toString().equals(vj.toString())){
         		v = s.pop();
-        		Stack<Vertex> successors = new Stack<Vertex>();
+        		LinkedList<Vertex> successors = new LinkedList<Vertex>();
         		v.label = count;
-        		System.out.println(v.toString() + ": count=" + count);
-        		count += 1;
+        		
+        		
         		for(int i=0; i<3; i++){
                     for(int j=0; j<3; j++){
                         if(i != j){
@@ -151,6 +151,9 @@ public class ExploredGraph {
         			}
         		}
         		Ve.add(v);//insert into closed
+        		
+        		System.out.println(v.toString() + ": count=" + count);
+        		count += 1;
         		System.out.println("OPEN = " + s.toString());
         		
         	}
@@ -180,7 +183,7 @@ public class ExploredGraph {
             System.out.println(next);
         }*/ // Implement this. (Iterative Depth-First Search)
         
-        public void bfs(Vertex vi, Vertex vj) {
+        /*public void bfs(Vertex vi, Vertex vj) {
             //Queue<Vertex> q = new LinkedList<Vertex>();
             q.add(vi);
             Vertex next = new Vertex("[[],[],[]]");
@@ -199,7 +202,45 @@ public class ExploredGraph {
             }
 
             
-        } // Implement this. (Breadth-First Search)
+        }*/
+        public void bfs(Vertex vi, Vertex vj) {
+        	int count = 0;
+        	//open = v0
+        	q.add(vi);
+        	Ve.clear();
+        	vi.predecessor = null;
+        	Vertex v = vi;
+        	while (!q.isEmpty() && !v.toString().equals(vj.toString())){
+        		v = q.remove();
+        		LinkedList<Vertex> successors = new LinkedList<Vertex>();
+        		v.label = count;
+        		count += 1;
+        		for(int i=0; i<3; i++){
+                    for(int j=0; j<3; j++){
+                        if(i != j){
+                            checkMove(i,j,v,"breadth first", successors);// s= successors of v?
+                        }
+                    }
+                }
+        		for(Vertex successor : successors){
+        			if (containsVertex(successor) || stackContainsVertex(successor)){
+        				//continue
+        				successor.predecessor = v;
+        			} else {
+        				s.push(successor);
+        				Edge e = new Edge(v, successor);
+        				Ee.push(e);
+        				successor.predecessor = v;
+        			}
+        		}
+        		Ve.add(v);//insert into closed
+        		System.out.println("OPEN = " + s.toString());
+        		
+        		
+        	}
+        }
+        
+        // Implement this. (Breadth-First Search)
         public LinkedList<Edge> retrievePath(Vertex vi) {
             LinkedList<Edge> temp = new LinkedList<Edge>();
             //while()
