@@ -91,8 +91,6 @@ public class ExploredGraph {
                     } else {
                     	successors.add(nextAdj);
                     }
-                    Edge e = new Edge(v,nextAdj);
-                    Ee.add(e);
                     //System.out.println(e.toString());
                     //System.out.println("");
                 //}
@@ -254,7 +252,7 @@ public class ExploredGraph {
         
         // Implement this. (Breadth-First Search)
         public LinkedList<Vertex> retrievePath(Vertex vj) {
-        	//assuming vertex is the same?
+        	int pathLength = 0;
             Stack<Vertex> temp = new Stack<Vertex>();
             LinkedList<Vertex> tempNodes = new LinkedList<Vertex>();
             tempNodes = Ve;
@@ -276,6 +274,7 @@ public class ExploredGraph {
             int size = temp.size();
             for (int i = 0; i < size; i++ ){
             	tempNodes.add(temp.pop());
+            	pathLength += 1;
             }
             
             //return LinkedList of all vertexes in path
@@ -283,7 +282,15 @@ public class ExploredGraph {
         }
         
         // Implement this.
-        public ArrayList<Vertex> shortestPath(Vertex vi, Vertex vj) {return null;} // Implement this.
+        public ArrayList<Vertex> shortestPath(Vertex vi, Vertex vj) {
+        	ArrayList<Vertex> path = new ArrayList<Vertex>();
+        	ExploredGraph eg = new ExploredGraph();
+        	eg.bfs(vi, vj);
+        	eg.retrievePath(vj); 
+        	return path;
+        	
+        }
+        // Implement this.
         public LinkedList<Vertex> getVertices() {return Ve;} 
         public LinkedList<Edge> getEdges() {return Ee;} 
         /**
