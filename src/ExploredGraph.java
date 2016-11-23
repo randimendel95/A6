@@ -91,8 +91,6 @@ public class ExploredGraph {
                     } else {
                     	successors.add(nextAdj);
                     }
-                    Edge e = new Edge(v,nextAdj);
-                    Ee.add(e);
                     //System.out.println(e.toString());
                     //System.out.println("");
                 //}
@@ -254,7 +252,7 @@ public class ExploredGraph {
         
         // Implement this. (Breadth-First Search)
         public LinkedList<Vertex> retrievePath(Vertex vj) {
-        	//assuming vertex is the same?
+        	int pathLength = -1;
             Stack<Vertex> temp = new Stack<Vertex>();
             LinkedList<Vertex> tempNodes = new LinkedList<Vertex>();
             tempNodes = Ve;
@@ -276,6 +274,7 @@ public class ExploredGraph {
             int size = temp.size();
             for (int i = 0; i < size; i++ ){
             	tempNodes.add(temp.pop());
+            	pathLength += 1;
             }
             
             //return LinkedList of all vertexes in path
@@ -283,7 +282,15 @@ public class ExploredGraph {
         }
         
         // Implement this.
-        public ArrayList<Vertex> shortestPath(Vertex vi, Vertex vj) {return null;} // Implement this.
+        public ArrayList<Vertex> shortestPath(Vertex vi, Vertex vj) {
+        	ArrayList<Vertex> path = new ArrayList<Vertex>();
+        	ExploredGraph eg = new ExploredGraph();
+        	eg.bfs(vi, vj);
+        	eg.retrievePath(vj); 
+        	return path;
+        	
+        }
+        // Implement this.
         public LinkedList<Vertex> getVertices() {return Ve;} 
         public LinkedList<Edge> getEdges() {return Ee;} 
         /**
@@ -296,11 +303,13 @@ public class ExploredGraph {
                 Vertex v0 = eg.new Vertex("[[4,3,2,1],[],[]]");
                 //System.out.println(v0);
                 Vertex v1 = eg.new Vertex("[],[],[4,3,2,1]");
+                eg.idfs(v0,v1);
+                eg.retrievePath(v1);
                 Vertex v2 = eg.new Vertex("[[],[4,3,1],[2]]");
                 //Operator op = eg.new Operator(0,1);
                 //eg.idfs(v0,v1);
-                eg.bfs(v0,v1);
-                eg.retrievePath(v2);
+                //eg.bfs(v0,v1);
+                //eg.retrievePath(v2);
                 //eg.retrievePath(v2);
                 // Add your own tests here.
                 // The autograder code will be used to test your basic functionality later.
