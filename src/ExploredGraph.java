@@ -55,7 +55,7 @@ public class ExploredGraph {
             return Ee.size();
         }    // Implement this.
         
-        public void checkMove (int startPeg, int endPeg, Vertex v, String searchType) {
+        /*public void checkMove (int startPeg, int endPeg, Vertex v, String searchType) {
             Operator op = new Operator(startPeg, endPeg);
             if(op.precondition(v)) {
                 //System.out.println(v.toString());
@@ -75,6 +75,28 @@ public class ExploredGraph {
                     System.out.println("");
                 }
             }
+        }*/
+        
+        public void checkMove (int startPeg, int endPeg, Vertex v, String searchType, Stack<Vertex> successors) {
+            Operator op = new Operator(startPeg, endPeg);
+            if(op.precondition(v)) {
+                //System.out.println(v.toString());
+                //System.out.println(Ve.toString());
+                Vertex nextAdj = op.transition(v);
+                //if(!containsVertex(nextAdj)){ //it has not yet been found
+                    //System.out.println("discovered" + nextAdj.toString());
+                    //Ve.add(nextAdj);
+                    if(searchType.equals("breadth first")){
+                        q.add(nextAdj);
+                    } else {
+                    	successors.push(nextAdj);
+                    }
+                    Edge e = new Edge(v,nextAdj);
+                    Ee.add(e);
+                    //System.out.println(e.toString());
+                    System.out.println("");
+                //}
+            }
         }
         
         
@@ -87,8 +109,54 @@ public class ExploredGraph {
             return false;
         }
         
+        public Boolean stackContainsVertex (Vertex v){
+            for(Vertex explored:s){
+                if(explored.toString().equals(v.toString())){
+                    return true;
+                }
+            }
+            return false;
+        }
+        
         //depth first search 
         public void idfs(Vertex vi, Vertex vj) {
+        	int count = 0;
+        	s.push(vi); //Open = V0
+        	Ve.clear();
+        	//Ve.push(vi); closed = []
+        	vi.predecessor = null;
+        	Vertex v = null;
+        	while(!s.isEmpty() || v.toString().equals(vj.toString())){
+        		v = s.pop();
+        		Stack<Vertex> successors = new Stack<Vertex>();
+        		v.label = count;
+        		System.out.println(v.toString() + ": count=" + count);
+        		count += 1;
+        		for(int i=0; i<3; i++){
+                    for(int j=0; j<3; j++){
+                        if(i != j){
+                            checkMove(i,j,v,"depth first", successors);// s= successors of v?
+                        }
+                    }
+                }
+        		for(Vertex successor : successors){
+        			if (containsVertex(successor) || stackContainsVertex(successor)){
+        				//continue
+        				successor.predecessor = v;
+        			} else {
+        				s.push(successor);
+        				Edge e = new Edge(v, successor);
+        				Ee.push(e);
+        				successor.predecessor = v;
+        			}
+        		}
+        		Ve.add(v);//insert into closed
+        		System.out.println("OPEN = " + s.toString());
+        		
+        	}
+        	System.out.println("Length of CLOSED = " + Ve.size());
+        }
+        /*public void idfs(Vertex vi, Vertex vj) {
             //Stack<Vertex> s = new Stack<Vertex>(); //stack of places to explore
             s.push(vi);
             count = 0;
@@ -110,7 +178,7 @@ public class ExploredGraph {
                 
             } 
             System.out.println(next);
-        } // Implement this. (Iterative Depth-First Search)
+        }*/ // Implement this. (Iterative Depth-First Search)
         
         public void bfs(Vertex vi, Vertex vj) {
             //Queue<Vertex> q = new LinkedList<Vertex>();
@@ -160,7 +228,7 @@ public class ExploredGraph {
                 Vertex v2 = eg.new Vertex("[[],[4,3,1],[2]]");
                 //Operator op = eg.new Operator(0,1);
                 eg.idfs(v0,v1);
-                eg.retrievePath(v2);
+                //eg.retrievePath(v2);
                 // Add your own tests here.
                 // The autograder code will be used to test your basic functionality later.
 
@@ -169,6 +237,8 @@ public class ExploredGraph {
         class Vertex {
                 ArrayList<Stack<Integer>> pegs; // Each vertex will hold a Towers-of-Hanoi state.
                 // There will be 3 pegs in the standard version, but more if you do extra credit option A5E1.
+                Vertex predecessor; 
+                int label;
                 
                 // Constructor that takes a string such as "[[4,3,2,1],[],[]]":
                 public Vertex(String vString) {
