@@ -87,7 +87,7 @@ public class ExploredGraph {
                     //System.out.println("discovered" + nextAdj.toString());
                     //Ve.add(nextAdj);
                     if(searchType.equals("breadth first")){
-                        q.add(nextAdj);
+                    	successors.add(nextAdj);
                     } else {
                     	successors.add(nextAdj);
                     }
@@ -111,6 +111,15 @@ public class ExploredGraph {
         
         public Boolean stackContainsVertex (Vertex v){
             for(Vertex explored:s){
+                if(explored.toString().equals(v.toString())){
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        public Boolean queueContainsVertex (Vertex v){
+            for(Vertex explored:q){
                 if(explored.toString().equals(v.toString())){
                     return true;
                 }
@@ -210,11 +219,10 @@ public class ExploredGraph {
         	Ve.clear();
         	vi.predecessor = null;
         	Vertex v = vi;
-        	while (!q.isEmpty() && !v.toString().equals(vj.toString())){
+        	while (!q.isEmpty() /*&& !v.toString().equals(vj.toString())*/){
         		v = q.remove();
         		LinkedList<Vertex> successors = new LinkedList<Vertex>();
         		v.label = count;
-        		count += 1;
         		for(int i=0; i<3; i++){
                     for(int j=0; j<3; j++){
                         if(i != j){
@@ -223,21 +231,23 @@ public class ExploredGraph {
                     }
                 }
         		for(Vertex successor : successors){
-        			if (containsVertex(successor) || stackContainsVertex(successor)){
+        			if (containsVertex(successor) || queueContainsVertex(successor)){
         				//continue
         				successor.predecessor = v;
         			} else {
-        				s.push(successor);
+        				q.add(successor);
         				Edge e = new Edge(v, successor);
         				Ee.push(e);
         				successor.predecessor = v;
         			}
         		}
+        		System.out.println(v.toString() + ": count=" + count);
+        		count += 1;
         		Ve.add(v);//insert into closed
-        		System.out.println("OPEN = " + s.toString());
-        		
-        		
+        		System.out.println("OPEN = " + q.toString());
+	
         	}
+        	System.out.println("Length of CLOSED = " + Ve.size());
         }
         
         // Implement this. (Breadth-First Search)
@@ -268,7 +278,8 @@ public class ExploredGraph {
                 Vertex v1 = eg.new Vertex("[],[],[4,3,2,1]");
                 Vertex v2 = eg.new Vertex("[[],[4,3,1],[2]]");
                 //Operator op = eg.new Operator(0,1);
-                eg.idfs(v0,v1);
+                //eg.idfs(v0,v1);
+                eg.bfs(v0,v1);
                 //eg.retrievePath(v2);
                 // Add your own tests here.
                 // The autograder code will be used to test your basic functionality later.
