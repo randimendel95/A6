@@ -94,7 +94,7 @@ public class ExploredGraph {
                     Edge e = new Edge(v,nextAdj);
                     Ee.add(e);
                     //System.out.println(e.toString());
-                    System.out.println("");
+                    //System.out.println("");
                 //}
             }
         }
@@ -136,6 +136,7 @@ public class ExploredGraph {
         	vi.predecessor = null;
         	Vertex v = vi;
         	while(!s.isEmpty() && !v.toString().equals(vj.toString())){
+        		System.out.println("");
         		v = s.pop();
         		LinkedList<Vertex> successors = new LinkedList<Vertex>();
         		v.label = count;
@@ -219,7 +220,8 @@ public class ExploredGraph {
         	Ve.clear();
         	vi.predecessor = null;
         	Vertex v = vi;
-        	while (!q.isEmpty() /*&& !v.toString().equals(vj.toString())*/){
+        	while (!q.isEmpty() && !v.toString().equals(vj.toString())){
+        		System.out.println("");
         		v = q.remove();
         		LinkedList<Vertex> successors = new LinkedList<Vertex>();
         		v.label = count;
@@ -251,16 +253,33 @@ public class ExploredGraph {
         }
         
         // Implement this. (Breadth-First Search)
-        public LinkedList<Edge> retrievePath(Vertex vi) {
-            LinkedList<Edge> temp = new LinkedList<Edge>();
-            //while()
-            int i = 0;
-                while(i < Ee.size() && !(Ee.get(i).end.toString().equals(vi.toString()))){
-                    temp.add(Ee.get(i));
-                    i++;
-                }
-                
-            return temp;
+        public LinkedList<Vertex> retrievePath(Vertex vj) {
+        	//assuming vertex is the same?
+            Stack<Vertex> temp = new Stack<Vertex>();
+            LinkedList<Vertex> tempNodes = new LinkedList<Vertex>();
+            tempNodes = Ve;
+            Vertex v = tempNodes.pop();
+            
+            //find this vertex in the searched Ve
+            while(!v.toString().equals(vj.toString())){
+            	v = tempNodes.pop();
+            }
+            
+            //Now find all predecessors and push these to a stack
+            while (v != null){
+            	temp.push(v);
+            	v = v.predecessor;               	
+            }
+            
+            //Now we need to reverse this to get in correct order
+            tempNodes.clear();
+            int size = temp.size();
+            for (int i = 0; i < size; i++ ){
+            	tempNodes.add(temp.pop());
+            }
+            
+            //return LinkedList of all vertexes in path
+            return tempNodes;
         }
         
         // Implement this.
@@ -271,15 +290,17 @@ public class ExploredGraph {
          * @param args
          */
         public static void main(String[] args) {
+        	
                 ExploredGraph eg = new ExploredGraph();
                 // Test the vertex constructor: 
                 Vertex v0 = eg.new Vertex("[[4,3,2,1],[],[]]");
-                System.out.println(v0);
+                //System.out.println(v0);
                 Vertex v1 = eg.new Vertex("[],[],[4,3,2,1]");
                 Vertex v2 = eg.new Vertex("[[],[4,3,1],[2]]");
                 //Operator op = eg.new Operator(0,1);
                 //eg.idfs(v0,v1);
                 eg.bfs(v0,v1);
+                eg.retrievePath(v2);
                 //eg.retrievePath(v2);
                 // Add your own tests here.
                 // The autograder code will be used to test your basic functionality later.
