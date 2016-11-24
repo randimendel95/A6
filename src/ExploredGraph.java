@@ -3,11 +3,8 @@ import java.util.Queue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
-import java.util.Set;
 import java.util.Stack;
-import java.util.function.Function;
 
 /**
  * 
@@ -96,30 +93,32 @@ public class ExploredGraph {
             return false;
         }
         
-        //iterative depth first search that searches from
+        //iterative depth first search that searches from starting Vertex to reach
+        //the given end vertex
         public void idfs(Vertex vi, Vertex vj) {
         	int count = 0;
                 int npegs = vi.pegs.size();
-        	s.push(vi); //Open = V0
+        	s.push(vi);
         	Ve.clear();
-
         	vi.predecessor = null;
         	Vertex v = vi;
+        	
+        	//keeps going through new vertex until end Vertex is found or stack is empty
         	while(!s.isEmpty() && !v.toString().equals(vj.toString())){
-        		
-        	    System.out.println("");
+        	    //System.out.println("");
         	    v = s.pop();
         	    LinkedList<Vertex> successors = new LinkedList<Vertex>();
         	    v.label = count;
         		
-        	   
+        	   //find all possible moves from this vertex and add to successors
         	    for(int i=0; i<npegs; i++){
                         for(int j=0; j<npegs; j++){
                             if(i != j){
-                                checkMove(i,j,v,"depth first", successors);// s= successors of v?
+                                checkMove(i,j,v,"depth first", successors);
                             }
                         }
                     }
+        	    //see which successors need to be added to the stack.
         	    for(Vertex successor : successors){
         		if (containsVertex(successor) || stackContainsVertex(successor)){
         		    //continue
@@ -149,30 +148,35 @@ public class ExploredGraph {
             Ve.clear();
             vi.predecessor = null;
             Vertex v = vi;
+            //loop through while there are still things in queue and the end Vertex
+            //has not been found yet
             while (!q.isEmpty() && !v.toString().equals(vj.toString())){
-                //System.out.println("");
-        	v = q.remove();
-        	LinkedList<Vertex> successors = new LinkedList<Vertex>();
-        	v.label = count;
-        	for(int i=0; i<npegs; i++){
-                    for(int j=0; j<npegs; j++){
-                        if(i != j){
-                            checkMove(i,j,v,"breadth first", successors);// s= successors of v?
-                        }
-                    }
-                }
-        	for(Vertex successor : successors){
-        	    if (containsVertex(successor) || queueContainsVertex(successor)){
-        		//continue
-        		successor.predecessor = v;
-        	    } else {
-        		q.add(successor);
-        		Edge e = new Edge(v, successor);
-        		Ee.push(e);
-        		successor.predecessor = v;
-        	    }
+            	//System.out.println("");
+	            //grab first in queue
+	        	v = q.remove();
+	        	LinkedList<Vertex> successors = new LinkedList<Vertex>();
+	        	v.label = count;
+	        	//check all possible moves of this situation and add to successors
+	        	for(int i=0; i<npegs; i++){
+	                    for(int j=0; j<npegs; j++){
+	                        if(i != j){
+	                            checkMove(i,j,v,"breadth first", successors);
+	                        }
+	                    }
+	                }
+	        	//Look through successors and see which ones need to be added to the queue
+	        	for(Vertex successor : successors){
+	        	    if (containsVertex(successor) || queueContainsVertex(successor)){
+	        		//continue
+	        		successor.predecessor = v;
+	        	    } else {
+	        		q.add(successor);
+	        		Edge e = new Edge(v, successor);
+	        		Ee.push(e);
+	        		successor.predecessor = v;
+	        	    }
         	}
-        	//System.out.println(v.toString() + ": count=" + count);
+        	System.out.println(v.toString() + ": count=" + count);
         	count += 1;
         	Ve.add(v);//insert into closed
         	//System.out.println("OPEN = " + q.toString());
@@ -225,7 +229,8 @@ public class ExploredGraph {
         
         //Returns a linkedList of all the explored Vertices
         public LinkedList<Vertex> getVertices() {return Ve;} 
-      //Returns a linkedList of all the explored edges
+        
+        //Returns a linkedList of all the explored edges
         public LinkedList<Edge> getEdges() {return Ee;} 
 
         public static void main(String[] args) {      	
@@ -234,9 +239,9 @@ public class ExploredGraph {
                 Vertex v0 = eg.new Vertex("[[4,3,2,1],[],[]]");
                 //System.out.println(v0);
                 Vertex v1 = eg.new Vertex("[[],[],[4,3,2,1]]");
-                //System.out.println("iterative depth first search");
-                //eg.idfs(v0,v1);
-                //eg.retrievePath(v1);
+                System.out.println("iterative depth first search");
+                eg.bfs(v0,v1);
+                eg.retrievePath(v1);
                 //Vertex v2 = eg.new Vertex("[[],[4,3,1],[2]]");
                 //Operator op = eg.new Operator(0,1);
                 //eg.idfs(v0,v1);
@@ -248,10 +253,10 @@ public class ExploredGraph {
         class Vertex {
                 ArrayList<Stack<Integer>> pegs; // Each vertex will hold a Towers-of-Hanoi state.
                 // There will be 3 pegs in the standard version, but more if you do extra credit option A5E1.
-                Vertex predecessor; 
-                int label;
+                Vertex predecessor; //stores predecessor of Vertex
+                int label;//stores the number of this vertex in the path of the search
                 
-                // Constructor that takes a string such as "[[4,3,2,1],[],[]]":
+                // Constructor  that takes a string such as "[[4,3,2,1],[],[]]":
                 public Vertex(String vString) {
                         String[] parts = vString.split("\\],\\[");
                         pegs = new ArrayList<Stack<Integer>>();
@@ -274,6 +279,7 @@ public class ExploredGraph {
                                 catch(NumberFormatException nfe) { nfe.printStackTrace(); }
                         }               
                 }
+                //returns a string showing what disks are on each peg
                 @Override
                 public String toString() {
                         String ans = "[";
