@@ -26,7 +26,7 @@ import java.util.function.Function;
  *
  */
 
-// Here is the main application class:
+//Graph of explored vertices in the towers of hanoi puzzle
 public class ExploredGraph {
         LinkedList<Vertex> Ve; // collection of explored vertices
         LinkedList<Edge> Ee;   // collection of explored edges
@@ -145,13 +145,12 @@ public class ExploredGraph {
         public void bfs(Vertex vi, Vertex vj) {
             int count = 0;
             int npegs = vi.pegs.size();
-            //open = v0
             q.add(vi);
             Ve.clear();
             vi.predecessor = null;
             Vertex v = vi;
             while (!q.isEmpty() && !v.toString().equals(vj.toString())){
-                System.out.println("");
+                //System.out.println("");
         	v = q.remove();
         	LinkedList<Vertex> successors = new LinkedList<Vertex>();
         	v.label = count;
@@ -173,7 +172,7 @@ public class ExploredGraph {
         		successor.predecessor = v;
         	    }
         	}
-        	System.out.println(v.toString() + ": count=" + count);
+        	//System.out.println(v.toString() + ": count=" + count);
         	count += 1;
         	Ve.add(v);//insert into closed
         	//System.out.println("OPEN = " + q.toString());
@@ -231,23 +230,19 @@ public class ExploredGraph {
 
         public static void main(String[] args) {      	
                 ExploredGraph eg = new ExploredGraph();
-                // Test the vertex constructor: 
-                Vertex v0 = eg.new Vertex("[[3,2,1],[],[],[]]");
+                
+                Vertex v0 = eg.new Vertex("[[4,3,2,1],[],[]]");
                 //System.out.println(v0);
-                Vertex v1 = eg.new Vertex("[],[],[],[3,2,1]");
+                Vertex v1 = eg.new Vertex("[[],[],[4,3,2,1]]");
                 //System.out.println("iterative depth first search");
                 //eg.idfs(v0,v1);
-               // System.out.println("path");
                 //eg.retrievePath(v1);
                 //Vertex v2 = eg.new Vertex("[[],[4,3,1],[2]]");
                 //Operator op = eg.new Operator(0,1);
                 //eg.idfs(v0,v1);
                 //System.out.println("breadth first search");
-                eg.bfs(v0,v1);
+                //eg.bfs(v0,v1);
                 //System.out.println("shortest path");
-                System.out.println(eg.shortestPath(v0, v1));
-                //eg.retrievePath(v1);
-                //eg.retrievePath(v2);
         }
         
         class Vertex {
@@ -291,29 +286,35 @@ public class ExploredGraph {
                 }
         }
         
+        //class representing the space between two vertices
         class Edge {
             Vertex start;
             Vertex end;
+                //initialize edge
                 public Edge(Vertex vi, Vertex vj) {
                     start = vi;
                     end = vj;
                         // Add whatever you need to here.
                 }
                 
+                //returns string representation of edge
                 @Override
                 public String toString() {
                     return "Edge from [" + getEndpoint1() + "] to [" + getEndpoint2() + "]";
                 }
                 
+                //returns the first endpoint of edge
                 public Vertex getEndpoint1() {
                     return start;
                 }
                 
+                //returns the second endpoint of edge
                 public Vertex getEndpoint2() {
                     return end;
                 }
         }
         
+        //class to allow for movement of disks between pegs
         class Operator {
             //i and j are the index of the pegs to attempt moving    
             private int i, j;
@@ -334,15 +335,17 @@ public class ExploredGraph {
                         return false;
                     }
                 }
-
+                
+                //move the top disk on i to j 
+                //returns the new vertex state by this operation
                 public Vertex transition(Vertex v) {
                     Vertex res = new Vertex(v.toString());
                     int disk = res.pegs.get(i).pop();
                     res.pegs.get(j).push(disk);
-                    // return a new vertex that represents the state reached by applying the operator
-                    return res; // Placeholder.  change this.
+                    return res; 
                 }
 
+                //returns a string showing what the movement was
                 @Override
                 public String toString() {
                         return "attempt to move from peg " + i + " to peg " + j;
