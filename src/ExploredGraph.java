@@ -14,8 +14,8 @@ import java.util.function.Function;
  */
 
 /**
- * @author your name(s) here.
- * Extra Credit Options Implemented, if any:  (mention them here.)
+ *Randi Mendel and Riley Andert
+ * Extra Credit Options Implemented, if any:  A5E1
  * 
  * Solution to Assignment 5 in CSE 373, Autumn 2016
  * University of Washington.
@@ -30,9 +30,9 @@ import java.util.function.Function;
 public class ExploredGraph {
         LinkedList<Vertex> Ve; // collection of explored vertices
         LinkedList<Edge> Ee;   // collection of explored edges
-        int count; //count of move we are currently on
+        int count; //count of moves in search 
         Stack<Vertex> s = new Stack<Vertex>(); //stack of vertices to be explored
-        Queue<Vertex> q = new LinkedList<Vertex>();//queue of verticies to be explored
+        Queue<Vertex> q = new LinkedList<Vertex>(); //queue of vertices to be explored
         
         public ExploredGraph() {
              Ve = new LinkedList<Vertex>();
@@ -62,11 +62,6 @@ public class ExploredGraph {
             Operator op = new Operator(startPeg, endPeg);
             if(op.precondition(v)) {
                 Vertex nextAdj = op.transition(v);
-                    /*if(searchType.equals("breadth first")){
-                    	successors.add(nextAdj);
-                    } else {
-                    	successors.add(nextAdj);
-                    }*/
                 successors.add(nextAdj);
             }
         }
@@ -91,7 +86,7 @@ public class ExploredGraph {
             return false;
         }
         
-      //returns true if the given vertex has been added to the queue of vertices to explore
+      //returns true if the given vertex, v, has been added to the queue of vertices to explore
         public Boolean queueContainsVertex (Vertex v){
             for(Vertex explored:q){
                 if(explored.toString().equals(v.toString())){
@@ -147,6 +142,7 @@ public class ExploredGraph {
         	System.out.println("Length of CLOSED = " + Ve.size());
         }
 
+        //breadth first search starting from vi and stopping once reaching vj
         public void bfs(Vertex vi, Vertex vj) {
             int count = 0;
             int npegs = vi.pegs.size();
@@ -237,9 +233,9 @@ public class ExploredGraph {
         public static void main(String[] args) {      	
                 ExploredGraph eg = new ExploredGraph();
                 // Test the vertex constructor: 
-                Vertex v0 = eg.new Vertex("[[4,3,2,1],[],[],[]]");
+                Vertex v0 = eg.new Vertex("[[4,3,2,1],[],[]]");
                 //System.out.println(v0);
-                Vertex v1 = eg.new Vertex("[],[],[],[4,3,2,1]");
+                Vertex v1 = eg.new Vertex("[],[],[4,3,2,1]");
                 System.out.println("iterative depth first search");
                 eg.idfs(v0,v1);
                // System.out.println("path");
