@@ -30,18 +30,21 @@ import java.util.function.Function;
 public class ExploredGraph {
         LinkedList<Vertex> Ve; // collection of explored vertices
         LinkedList<Edge> Ee;   // collection of explored edges
-        int count;
-        Stack<Vertex> s = new Stack<Vertex>();
-        Queue<Vertex> q = new LinkedList<Vertex>();
+        int count; //count of move we are currently on
+        Stack<Vertex> s = new Stack<Vertex>(); //stack of vertices to be explored
+        Queue<Vertex> q = new LinkedList<Vertex>();//queue of verticies to be explored
         
         public ExploredGraph() {
              Ve = new LinkedList<Vertex>();
              Ee = new LinkedList<Edge>();
         }
 
-        public void initialize(Vertex v) {
-            ExploredGraph eg = new ExploredGraph(); //??????
-            Ve.add(v);
+        //Empties Explored Graph's explored vertices and edges
+        public void initialize() {
+            Ve.clear();
+            s.clear();
+            q.clear();
+            Ee.clear();
         }
         
         //returns explored vertices
@@ -54,18 +57,21 @@ public class ExploredGraph {
             return Ee.size();
         } 
         
+        //checks precondition of v to see if valid move and if so adds it as a successor to later explore.
         public void checkMove (int startPeg, int endPeg, Vertex v, String searchType, LinkedList<Vertex> successors) {
             Operator op = new Operator(startPeg, endPeg);
             if(op.precondition(v)) {
                 Vertex nextAdj = op.transition(v);
-                    if(searchType.equals("breadth first")){
+                    /*if(searchType.equals("breadth first")){
                     	successors.add(nextAdj);
                     } else {
                     	successors.add(nextAdj);
-                    }
+                    }*/
+                successors.add(nextAdj);
             }
         }
         
+        //returns true if the given vertex has been added to the explored vertex LinkedList
         public Boolean containsVertex (Vertex v){
             for(Vertex explored:Ve){
                 if(explored.toString().equals(v.toString())){
@@ -75,6 +81,7 @@ public class ExploredGraph {
             return false;
         }
         
+      //returns true if the given vertex has been added to the stack of vertices to explore
         public Boolean stackContainsVertex (Vertex v){
             for(Vertex explored:s){
                 if(explored.toString().equals(v.toString())){
@@ -84,6 +91,7 @@ public class ExploredGraph {
             return false;
         }
         
+      //returns true if the given vertex has been added to the queue of vertices to explore
         public Boolean queueContainsVertex (Vertex v){
             for(Vertex explored:q){
                 if(explored.toString().equals(v.toString())){
@@ -93,7 +101,7 @@ public class ExploredGraph {
             return false;
         }
         
-        //depth first search 
+        //iterative depth first search that searches from
         public void idfs(Vertex vi, Vertex vj) {
         	int count = 0;
                 int npegs = vi.pegs.size();
@@ -178,7 +186,8 @@ public class ExploredGraph {
             System.out.println("Length of CLOSED = " + Ve.size());
         }
         
-        // Implement this. (Breadth-First Search)
+        //Retrieves the path to the Vertex vj, then returns a LinkedList of the 
+        //vertices in this path
         public LinkedList<Vertex> retrievePath(Vertex vj) {
             int pathLength = -1;
             Stack<Vertex> temp = new Stack<Vertex>();
@@ -209,7 +218,8 @@ public class ExploredGraph {
             return tempNodes;
         }
         
-        // Implement this.
+        //First does breadth first search for given Vertex
+        //Next retrieves the path and returns an ArrayList of this path
         public ArrayList<Vertex> shortestPath(Vertex vi, Vertex vj) {
         	ArrayList<Vertex> path = new ArrayList<Vertex>();
         	ExploredGraph eg = new ExploredGraph();
@@ -219,12 +229,12 @@ public class ExploredGraph {
         	return path;
         }
         
-        // Implement this.
+        //Returns a linkedList of all the explored Vertices
         public LinkedList<Vertex> getVertices() {return Ve;} 
+      //Returns a linkedList of all the explored edges
         public LinkedList<Edge> getEdges() {return Ee;} 
 
-        public static void main(String[] args) {
-        	
+        public static void main(String[] args) {      	
                 ExploredGraph eg = new ExploredGraph();
                 // Test the vertex constructor: 
                 Vertex v0 = eg.new Vertex("[[4,3,2,1],[],[],[]]");
