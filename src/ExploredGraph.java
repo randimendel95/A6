@@ -248,9 +248,6 @@ public class ExploredGraph {
                 System.out.println(eg.shortestPath(v0, v1));
                 //eg.retrievePath(v1);
                 //eg.retrievePath(v2);
-                // Add your own tests here.
-                // The autograder code will be used to test your basic functionality later.
-
         }
         
         class Vertex {
@@ -318,16 +315,16 @@ public class ExploredGraph {
         }
         
         class Operator {
-                private int i, j;
+            //i and j are the index of the pegs to attempt moving    
+            private int i, j;
 
                 public Operator(int i, int j) { // Constructor for operators.
                         this.i = i;
                         this.j = j;
                 }
-
+                
+                //returns true if vertex v can have the top disk on peg i move to peg j
                 public boolean precondition(Vertex v) {
-                    // it would possible and legal to move a disk from peg i to peg j
-                    //System.out.println(v.pegs.get(i));
                     if(v.pegs.get(i).isEmpty()){
                         return false;
                     } else if (v.pegs.get(j).isEmpty() || v.pegs.get(i).peek() < v.pegs.get(j).peek()){
@@ -348,8 +345,6 @@ public class ExploredGraph {
 
                 @Override
                 public String toString() {
-                        // TODO: Add code to return a string good enough
-                        // to distinguish different operators
                         return "attempt to move from peg " + i + " to peg " + j;
                 }
         }
