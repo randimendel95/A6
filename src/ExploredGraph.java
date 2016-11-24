@@ -100,10 +100,9 @@ public class ExploredGraph {
         public void idfs(Vertex vi, Vertex vj) {
         	int count = 0;
                 int npegs = vi.pegs.size();
-        	System.out.println("number of pegs: " + npegs);
         	s.push(vi); //Open = V0
         	Ve.clear();
-        	//Ve.push(vi); closed = []
+
         	vi.predecessor = null;
         	Vertex v = vi;
         	while(!s.isEmpty() && !v.toString().equals(vj.toString())){
@@ -136,10 +135,10 @@ public class ExploredGraph {
         		
         	    System.out.println(v.toString() + ": count=" + count);
         	    count += 1;
-        	    System.out.println("OPEN = " + s.toString());
+        	    //System.out.println("OPEN = " + s.toString());
         		
         	}
-        	System.out.println("Length of CLOSED = " + Ve.size());
+        	//System.out.println("Length of CLOSED = " + Ve.size());
         }
 
         //breadth first search starting from vi and stopping once reaching vj
@@ -177,9 +176,9 @@ public class ExploredGraph {
         	System.out.println(v.toString() + ": count=" + count);
         	count += 1;
         	Ve.add(v);//insert into closed
-        	System.out.println("OPEN = " + q.toString());
+        	//System.out.println("OPEN = " + q.toString());
             }
-            System.out.println("Length of CLOSED = " + Ve.size());
+            //System.out.println("Length of CLOSED = " + Ve.size());
         }
         
         //Retrieves the path to the Vertex vj, then returns a LinkedList of the 
@@ -233,21 +232,21 @@ public class ExploredGraph {
         public static void main(String[] args) {      	
                 ExploredGraph eg = new ExploredGraph();
                 // Test the vertex constructor: 
-                Vertex v0 = eg.new Vertex("[[4,3,2,1],[],[]]");
+                Vertex v0 = eg.new Vertex("[[3,2,1],[],[],[]]");
                 //System.out.println(v0);
-                Vertex v1 = eg.new Vertex("[],[],[4,3,2,1]");
-                System.out.println("iterative depth first search");
-                eg.idfs(v0,v1);
+                Vertex v1 = eg.new Vertex("[],[],[],[3,2,1]");
+                //System.out.println("iterative depth first search");
+                //eg.idfs(v0,v1);
                // System.out.println("path");
                 //eg.retrievePath(v1);
                 //Vertex v2 = eg.new Vertex("[[],[4,3,1],[2]]");
                 //Operator op = eg.new Operator(0,1);
                 //eg.idfs(v0,v1);
                 //System.out.println("breadth first search");
-                //eg.bfs(v0,v1);
+                eg.bfs(v0,v1);
                 //System.out.println("shortest path");
-                //eg.shortestPath(v0, v1);
-                //eg.retrievePath(v2);
+                System.out.println(eg.shortestPath(v0, v1));
+                //eg.retrievePath(v1);
                 //eg.retrievePath(v2);
                 // Add your own tests here.
                 // The autograder code will be used to test your basic functionality later.
