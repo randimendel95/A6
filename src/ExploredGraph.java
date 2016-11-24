@@ -239,9 +239,8 @@ public class ExploredGraph {
                 Vertex v0 = eg.new Vertex("[[4,3,2,1],[],[]]");
                 //System.out.println(v0);
                 Vertex v1 = eg.new Vertex("[[],[],[4,3,2,1]]");
-                System.out.println("iterative depth first search");
-                eg.bfs(v0,v1);
-                eg.retrievePath(v1);
+                //eg.bfs(v0,v1);
+                eg.shortestPath(v0, v1);
                 //Vertex v2 = eg.new Vertex("[[],[4,3,1],[2]]");
                 //Operator op = eg.new Operator(0,1);
                 //eg.idfs(v0,v1);
